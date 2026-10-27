@@ -38,8 +38,10 @@ class TodoControllerTests {
             .andExpect(jsonPath("$.list", hasSize(10)))
             .andExpect(jsonPath("$.pagination.total", is(12)))
             .andExpect(jsonPath("$.pagination.last", is(2)))
-            // 페이지 안에서는 미완료가 먼저 온다
-            .andExpect(jsonPath("$.list[0].status", is(false)));
+            // 미완료(6건)가 먼저, 그 안에서는 최신순
+            .andExpect(jsonPath("$.list[0].name", is("할일12")))
+            .andExpect(jsonPath("$.list[5].status", is(false)))
+            .andExpect(jsonPath("$.list[6].status", is(true)));
 
         mockMvc.perform(get("/todos").param("page", "2").param("size", "10"))
             .andExpect(status().isOk())
@@ -77,8 +79,10 @@ class TodoControllerTests {
                 .content("{\"name\":\"아이디 없는 할일\"}"))
             .andExpect(status().isCreated());
 
+        // 가장 최근에 추가한 할 일이 첫 페이지 맨 위에 온다
         mockMvc.perform(get("/todos"))
-            .andExpect(jsonPath("$.pagination.total", is(14)));
+            .andExpect(jsonPath("$.pagination.total", is(14)))
+            .andExpect(jsonPath("$.list[0].name", is("아이디 없는 할일")));
     }
 
     @Test

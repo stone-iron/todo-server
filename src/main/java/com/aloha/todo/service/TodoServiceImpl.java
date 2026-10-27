@@ -1,6 +1,5 @@
 package com.aloha.todo.service;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -26,14 +25,9 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public PageInfo<Todos> list(int page, int size) {
         // PageHelper.startPage(현재 페이지, 페이지당 개수) 바로 다음 쿼리에 페이징이 적용된다.
+        // 정렬(미완료 → 완료, 최신순)은 SQL 에서 처리하므로 페이지가 바뀌어도 순서가 이어진다.
         PageHelper.startPage(page, size);
-        PageInfo<Todos> pageInfo = new PageInfo<>(todoMapper.list());
-
-        // 페이지 안에서 정렬: 미완료(false) → 완료(true), 같은 상태면 순서(seq) 오름차순
-        pageInfo.getList().sort(
-            Comparator.comparing(Todos::getStatus).thenComparing(Todos::getSeq)
-        );
-        return pageInfo;
+        return new PageInfo<>(todoMapper.list());
     }
 
     @Override

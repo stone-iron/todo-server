@@ -5,11 +5,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.aloha.todo.mapper.TodoMapper">
 
-    <!-- 목록: 등록 순서대로 가져오고, 페이지 안에서의 정렬(미완료 → 완료, 순서)은 서비스에서 처리 -->
+    <!-- 목록: 미완료 → 완료, 같은 상태에서는 최근에 등록한 순 (새 할 일이 첫 페이지 맨 위에 보이도록) -->
     <select id="list" resultType="Todos">
         SELECT *
         FROM todos
-        ORDER BY no ASC
+        ORDER BY status ASC, no DESC
     </select>
 
     <select id="select" resultType="Todos">
