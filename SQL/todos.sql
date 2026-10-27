@@ -1,6 +1,9 @@
 -- 할 일 목록 테이블 (MySQL)
 -- 실행 전: CREATE DATABASE IF NOT EXISTS aloha; USE aloha;
 
+-- 터미널 기본 문자셋이 latin1 이어도 한글이 깨지지 않도록 지정
+SET NAMES utf8mb4;
+
 DROP TABLE IF EXISTS `todos`;
 
 CREATE TABLE `todos` (
